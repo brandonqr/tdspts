@@ -1,0 +1,8 @@
+Mongoose documentacion
+http://mongoosejs.com/docs/index.html
+
+nightmareJs documentacion
+https://github.com/segmentio/nightmare
+
+EcmaScript6
+https://desarrolloweb.com/manuales/manual-de-ecmascript-6.html
