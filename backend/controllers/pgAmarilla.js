@@ -5,43 +5,46 @@ var Web = require('../models/web');
 class PgAmarilla {
     constructor() {
             this.busqueda = '';
-            this.urlPgResultados = '';
-            this.pgResultados = {};
-            this.contadorLinksPgResultados = 0;
-            this.contadorLinksObjeto = 0;
-            this.objetoAInsertar = {};
+            this.nightmare = Nightmare({ show: true });
+            this.url = '';
             this.links = [];
+            this.contadorLinksObjeto = 0;
+            this.contadorLinksPgResultados = 0;
+            this.TotalPg = 0;
         }
         //solo busca y obtiene el total de resultado, el numero de paginas, etc
     BuscarEnWeb(busqueda) {
+        this.busqueda = busqueda;
 
-        var nightmare = Nightmare({ show: false })
-
-        nightmare
+        this.nightmare
             .goto('https://www.paginasamarillas.es/search')
-            .type('#what', busqueda)
+            .type('#what', this.busqueda)
             .click('#btnFind')
             .wait('.listado-item')
             .inject('js', 'node_modules/jquery/dist/jquery.min.js')
             .evaluate(() => {
                 return window.location.href;
             })
-            .end()
-            .then((urlPgResultados) => {
-                this.urlPgResultados = urlPgResultados;
-                this.ObtenerLinks();
+            //.end()
+            .then((url) => {
+                this.url = url;
+                this.ObtenerLinksDeResultados();
 
             })
             .catch(error => {
                 console.error('Search failed:', error);
-            })
+            });
     }
-    ObtenerLinks() {
-        var nightmare = Nightmare({ show: false })
-        nightmare
-            .goto(this.urlPgResultados)
-            .inject('js', 'node_modules/jquery/dist/jquery.min.js')
+    ObtenerLinksDeResultados() {
+        if (this.TotalPg > 0) {
+            console.log(`Descargando pagina ${this.contadorLinksPgResultados + 1} de ${this.TotalPg}`)
+        } else {
+            console.log(`Descargando pagina ${this.contadorLinksPgResultados + 1}`)
+        }
+        this.nightmare
+            .goto(this.url)
             .wait('.listado-item')
+            .inject('js', 'node_modules/jquery/dist/jquery.min.js')
             .evaluate(() => {
                 var devolver = {};
                 var links = [];
@@ -68,50 +71,44 @@ class PgAmarilla {
                     urlSugerencia
                 }
                 return devolver;
-
             })
-            .end()
+            //.end()
             .then((objeto) => {
-
+                this.TotalPg = objeto.nPaginas;
                 if (objeto.urlPgSiguiente != undefined) {
-                    this.urlPgResultados = objeto.urlPgSiguiente;
+                    this.url = objeto.urlPgSiguiente;
                     this.links = objeto.links;
                     this.CrearObjeto();
 
                 }
                 //solo hay un pagina si se cumple ésta funcion
                 else if (this.contadorLinksPgResultados == 0) {
-                    this.urlPgResultados = objeto.urlActual;
+                    this.url = objeto.urlActual;
                     this.links = objeto.links;
                     this.CrearObjeto();
                 } else if (objeto.urlSugerencia != undefined) {
-                    this.urlPgResultados = objeto.urlSugerencia;
+                    this.url = objeto.urlSugerencia;
                     this.links = objeto.links;
                     this.CrearObjeto();
                 }
-                console.log(this.contadorLinksPgResultados);
-
 
                 //this.urlPgResultados = objeto.urlPgResultados;
-
-
             })
             .catch(error => {
                 console.error('Search failed:', error);
-            })
+            });
+
     }
     CrearObjeto() {
         //console.log(objeto);
-        var nightmare = Nightmare({ show: false })
 
-        nightmare
+        this.nightmare
             .goto(this.links[this.contadorLinksObjeto])
             //.type('#search_form_input_homepage', 'github nightmare')
             //.click('#search_button_homepage')
             //.inject('js', 'node_modules/jquery/dist/jquery.min.js')
             .wait('#bloqueInfo')
             .evaluate(() => {
-
                 var servicios = [];
                 var redesSociales = [];
                 var objeto = {};
@@ -152,8 +149,9 @@ class PgAmarilla {
 
                 return web;
             })
-            .end()
+            //.end()
             .then((web) => {
+
 
                 if (this.contadorLinksObjeto < this.links.length - 1) {
                     this.contadorLinksObjeto++;
@@ -162,7 +160,7 @@ class PgAmarilla {
                 } else if (this.contadorLinksObjeto == this.links.length - 1) {
                     this.contadorLinksObjeto = 0;
                     this.contadorLinksPgResultados++;
-                    this.ObtenerLinks();
+                    this.ObtenerLinksDeResultados();
                 }
             })
             .catch(error => {
@@ -184,13 +182,14 @@ class PgAmarilla {
                     if (err) {
                         return;
                     }
-                    console.log("Objeto insertado");
+                    console.log(`Se ha insertado`);
                 });
             } else {
-                console.log("El objeto ya está insertado en la DB");
+                console.log(`ya se encuentra en la base de datos`);
             }
             return true;
         });
     }
+
 }
 module.exports = PgAmarilla;
