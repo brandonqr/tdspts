@@ -2,7 +2,7 @@ var Nightmare = require("nightmare");
 var Web = require("../models/web");
 class PgAmarilla {
     constructor() {
-        this.nightmare = Nightmare({ show: true });
+        this.nightmare = Nightmare({ show: false });
         this.todosLosLinks = [];
         this.contadorResultados = 0;
         this.contadorObjetos = 0;
@@ -10,6 +10,7 @@ class PgAmarilla {
         this.web = {};
     }
     Busqueda(busqueda) {
+        this.busqueda = busqueda;
         console.log("Incio");
         var that = this;
         this.nightmare
@@ -226,7 +227,10 @@ class PgAmarilla {
                 }
             })
             .catch(error => {
-                console.log("ha petado en obtener objeto");
+                console.log("ha petado en obtener objeto, volviendo a iniciar");
+                this.todosLosLinks = [];
+                this.Busqueda(this.busqueda);
+
 
                 // console.error("Search failed:", error);
             });
