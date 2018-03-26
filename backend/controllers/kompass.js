@@ -2,7 +2,7 @@ const Nightmare = require('nightmare');
 var Web = require('../models/web');
 class Kompass {
     constructor() {
-        this.nightmare = Nightmare({ show: true });
+        this.nightmare = Nightmare({ show: false });
         this.contador = 0;
         this.url = `https://es.kompass.com/easybusiness#/detail/${this.contador}/1`;
     }
