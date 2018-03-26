@@ -11,7 +11,7 @@ app.post('/', (req, res, next) => {
 
     p = new PgAmarilla();
 
-    p.BuscarEnWeb(busqueda);
+    p.Busqueda(busqueda);
 
     res
         .status(200)

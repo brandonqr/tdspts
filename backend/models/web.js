@@ -10,13 +10,11 @@ var webSchema = new Schema({
     web: { type: String },
     provincia: { type: String },
     localidad: { type: String },
-    estado_mailchimp: { type: String },
     pais: { type: String },
     direccion: { type: String },
     fuente_id: { type: String },
     redes_sociales: { type: String },
     servicios: { type: String },
-    usuario: { type: String }
 
 
 });
