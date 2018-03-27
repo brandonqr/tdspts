@@ -4,7 +4,7 @@ class PgAmarilla {
     constructor() {
         this.nightmare = Nightmare({ show: false });
         this.todosLosLinks = [];
-        this.contadorResultados = 0;
+        this.contadorResultados = 149;
         this.contadorObjetos = 0;
         this.linksObjetos = [];
         this.web = {};

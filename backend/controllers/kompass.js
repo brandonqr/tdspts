@@ -3,8 +3,7 @@ var Web = require('../models/web');
 class Kompass {
     constructor() {
         this.nightmare = Nightmare({ show: false });
-        this.contador = 0;
-        this.url = `https://es.kompass.com/easybusiness#/detail/${this.contador}/1`;
+        this.contador = 1567;
         this.totalEmpresas = 0;
     }
     Login() {
@@ -48,7 +47,7 @@ class Kompass {
             // .end()
             .then(totalEmpresas => {
                 this.totalEmpresas = parseInt(totalEmpresas);
-                this.Empezar(this.url);
+                this.Empezar(`https://es.kompass.com/easybusiness#/detail/${this.contador}/1`);
                 this.contador++;
             })
             .catch(error => {
@@ -114,6 +113,8 @@ class Kompass {
             .catch(error => {
                 if (this.contador < this.totalEmpresas) {
                     this.Empezar(`https://es.kompass.com/easybusiness#/detail/${this.contador}/1`);
+                } else {
+                    this.Finalizar();
                 }
 
                 //this.Finalizar();
