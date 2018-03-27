@@ -5,6 +5,7 @@ class Kompass {
         this.nightmare = Nightmare({ show: false });
         this.contador = 0;
         this.url = `https://es.kompass.com/easybusiness#/detail/${this.contador}/1`;
+        this.totalEmpresas = 0;
     }
     Login() {
         this.nightmare
@@ -28,7 +29,7 @@ class Kompass {
             .click("#company-detail-link-0")
             .wait("div.detail-company-selection:nth-child(2)")
             .evaluate(() => {
-                return true;
+                return $(".breadcrumb-companies-count").text();
                 /*
                 $('#company-tab-link-0').click();
                 var jsonFinal = {};
@@ -45,7 +46,8 @@ class Kompass {
 */
             })
             // .end()
-            .then(objeto => {
+            .then(totalEmpresas => {
+                this.totalEmpresas = parseInt(totalEmpresas);
                 this.Empezar(this.url);
                 this.contador++;
             })
@@ -110,7 +112,11 @@ class Kompass {
                 );
             })
             .catch(error => {
-                this.Finalizar();
+                if (this.contador < this.totalEmpresas) {
+                    this.Empezar(`https://es.kompass.com/easybusiness#/detail/${this.contador}/1`);
+                }
+
+                //this.Finalizar();
             });
     }
     InsertarEnDB(web) {
