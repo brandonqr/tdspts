@@ -19,6 +19,7 @@ app.use(bodyParser.json());
 var appRoutes = require('./routes/app');
 var pgAmarillaRoutes = require('./routes/pgAmarilla');
 var kompassRoutes = require('./routes/kompass');
+var bniRoutes = require("./routes/bni");
 
 //conexxion a la base de datos
 mongoose.connection.openUri(BASE_DE_DATOS_URI, (err, res) => {
@@ -31,6 +32,7 @@ mongoose.connection.openUri(BASE_DE_DATOS_URI, (err, res) => {
 //rutas
 app.use('/paginas-amarillas', pgAmarillaRoutes);
 app.use('/kompass', kompassRoutes);
+app.use("/bni", bniRoutes);
 app.use('/', appRoutes);
 
 
