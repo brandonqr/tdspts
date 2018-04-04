@@ -82,8 +82,14 @@ class Bni {
                         } catch (error) {
                             cp = "";
                         }
+                        var email = "";
+                        try {
+                            email = $("label[for='memberEmail']").children()[1].innerText || "";
+                        } catch (error) {
+                            email = "";
+                        }
                         var fuente_id = $("#homeUserId").val();
-                        objeto = { nombre, palabras_clave, empresa, telefono, direccion, ciudad, pais, cp, fuente_id };
+                        objeto = { nombre, email, palabras_clave, empresa, telefono, direccion, ciudad, pais, cp, fuente_id };
                     } else {
                         objeto = undefined;
                     }
