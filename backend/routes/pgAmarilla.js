@@ -11,8 +11,6 @@ app.post('/', (req, res, next) => {
 
     p = new PgAmarilla();
 
-    p.Busqueda(busqueda);
-
     res
         .status(200)
         .json({

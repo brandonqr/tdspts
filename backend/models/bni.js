@@ -4,6 +4,7 @@ var Schema = mongose.Schema;
 var bniSchema = new Schema({
     nombre: { type: String },
     email: { type: String },
+    web: { type: String },
     palabras_clave: { type: String },
     empresa: { type: String },
     telefono: { type: String },

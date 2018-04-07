@@ -62,6 +62,12 @@ class Bni {
                         } catch (error) {
                             direccion = "";
                         }
+                        var web = "";
+                        try {
+                            web = $("label[for='memberWebsite']").children()[1].innerText || "";
+                        } catch (error) {
+                            web = "";
+                        }
 
                         var ciudad = "";
                         try {
