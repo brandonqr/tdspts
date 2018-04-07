@@ -95,7 +95,7 @@ class Bni {
                             email = "";
                         }
                         var fuente_id = $("#homeUserId").val();
-                        objeto = { nombre, email, palabras_clave, empresa, telefono, direccion, ciudad, pais, cp, fuente_id };
+                        objeto = { nombre, email, web, palabras_clave, empresa, telefono, direccion, ciudad, pais, cp, fuente_id };
                     } else {
                         objeto = undefined;
                     }
